@@ -14,14 +14,14 @@
   "item.bren.bullet": "Bullet",
   "item.bren.shell": "Shell",
   "item.bren.metal_tube": "Metal Tube",
-  "item.bren.auto_loader_contraption": "AutoLoader Contraption",
+  "item.bren.auto_loader_contraption": "Autoloader Contraption",
 
   "enchantment.bren.silenced": "Silenced",
   "enchantment.bren.overflow": "Overflow",
   "enchantment.bren.autofill": "Autofill",
   "enchantment.bren.steady_hands": "Steady Hands",
   
-  "desc.bren.item.machine_gun.content": "Rounds",
+  "desc.bren.item.gun_with_mag.content": "Rounds",
   "desc.bren.item.magazine.content": "Ammo",
 
   "block.bren.workbench": "Workbench",
@@ -30,9 +30,9 @@
 
   "bren.item.shoot_silenced": "Silenced gunfire",
   "bren.item.shoot": "Gunfire",
-  "bren.item.machine_gun.distant_shoot": "Distant gunfire",
-  "bren.item.machine_gun.magazine_insert": "Magazine inserted",
-  "bren.item.machine_gun.magazine_remove": "Magazine removed",
+  "bren.item.distant_gunfire": "Distant gunfire",
+  "bren.item.magazine_insert": "Magazine inserted",
+  "bren.item.magazine_remove": "Magazine removed",
   "bren.item.shell_insert": "Shell inserted",
   "bren.item.rack": "Shotgun racked",
   "bren.particle.casing.bounce": "Casing bouncing",
@@ -44,7 +44,7 @@
   "attribute.name.fire_rate": "Fire Rate",
   "attribute.name.recoil": "Recoil",
 
-  "advancements.bren.adventure.auto_loader_contraption.description": "Obtain an AutoLoader Contraption",
+  "advancements.bren.adventure.auto_loader_contraption.description": "Obtain an Autoloader Contraption",
   "advancements.bren.adventure.auto_loader_contraption.title": "A whaaa...?!",
 
   "advancements.bren.adventure.machine_gun.description": "Obtain an Machine Gun",

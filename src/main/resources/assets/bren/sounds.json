@@ -54,23 +54,23 @@
       "bren:silenced_rifle_shot"
     ]
   },
-  "item.machine_gun.distant_shoot": {
-    "subtitle": "bren.item.machine_gun.distant_shoot",
+  "item.distant_gunfire": {
+    "subtitle": "bren.item.distant_gunfire",
     "sounds": [
-      "bren:distant_machine_gun_shot_0",
-      "bren:distant_machine_gun_shot_1"
+      "bren:distant_gunfire_0",
+      "bren:distant_gunfire_1"
     ]
   },
-  "item.machine_gun.magazine_insert": {
-    "subtitle": "bren.item.machine_gun.magazine_insert",
+  "item.magazine_insert": {
+    "subtitle": "bren.item.magazine_insert",
     "sounds": [
-      "bren:machine_gun_magazine_insert"
+      "bren:magazine_insert"
     ]
   },
-  "item.machine_gun.magazine_remove": {
-    "subtitle": "bren.item.machine_gun.magazine_remove",
+  "item.magazine_remove": {
+    "subtitle": "bren.item.magazine_remove",
     "sounds": [
-      "bren:machine_gun_magazine_remove"
+      "bren:magazine_remove"
     ]
   },
   "entity.villager.work_gunsmith": {

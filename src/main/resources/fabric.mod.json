@@ -2,13 +2,20 @@
 	"schemaVersion": 1,
 	"id": "bren",
 	"version": "${version}",
-	"name": "bren",
-	"description": "EVER WANTED TO START A WAR!! Or just kill mobs better... ANYWAY THIS IS THE MOD FOR YOU!",
+	"name": "Bren: Continued",
+	"description": "Unofficial continuation fork of Bren",
 	"authors": [
 		"Sniffiandros!"
 	],
+	"contributors": [
+		"B1n-ry",
+		"WHY-HAVE-YOU-SUMMONED-ME"
+	],
 	"contact": {
-		"homepage": "https://legacy.curseforge.com/minecraft/mc-mods/bren"
+		"homepage": "https://github.com/WHY-HAVE-YOU-SUMMONED-ME/bren",
+		"curseforge": "https://legacy.curseforge.com/minecraft/mc-mods/bren",
+		"modrinth": "https://modrinth.com/mod/bren",
+		"og-sources": "https://github.com/SniffVillage/bren"
 	},
 	"license": "ARR",
 	"icon": "assets/bren/icon.png",
@@ -29,8 +36,5 @@
 		"minecraft": "~1.20.1",
 		"java": ">=17",
 		"fabric-api": "*"
-	},
-	"suggests": {
-		"another-mod": "*"
 	}
 }

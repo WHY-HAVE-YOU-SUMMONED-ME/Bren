@@ -9,6 +9,7 @@ import net.minecraft.network.PacketByteBuf;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.util.Arm;
 import net.minecraft.util.Hand;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec2f;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
@@ -36,8 +37,7 @@ public class GunUtils {
 
         if (!(stack.getItem() instanceof GunItem gunItem)) return 0;
 
-        if (!((IGunUser)user).getGunState().equals(GunHelper.GunStates.NORMAL)) { return 0;}
-
+        if (!((IGunUser)user).getGunState().equals(GunHelper.GunStates.NORMAL)) return 0;
 
         boolean silenced = EnchantmentHelper.getLevel(EnchantmentReg.SILENCED, stack) >= 1;
 
@@ -70,9 +70,8 @@ public class GunUtils {
             }
 
             for (int i = 0; i < gunItem.bulletAmount(); ++i) {
-                float x = (user.getRandom().nextFloat() - .5f) * 2 * gunItem.spread();
-                float y = (user.getRandom().nextFloat() - .5f) * 2 * gunItem.spread();
-
+                float x = (user.getRandom().nextFloat() - 0.5f) * 2 * gunItem.spread();
+                float y = (user.getRandom().nextFloat() - 0.5f) * 2 * gunItem.spread();
                 GunUtils.spawnBullet(user, origin, front, stack, new Vec2f(x,y), false, gunItem.bulletLifespan());
             }
         }
@@ -81,7 +80,7 @@ public class GunUtils {
             PacketByteBuf buf = PacketByteBufs.create();
             double recoil = user.getAttributeValue(AttributeReg.RECOIL);
             recoil *= MConfig.recoilMultiplier.get();
-            recoil /= ((EnchantmentHelper.getLevel(EnchantmentReg.STEADY_HANDS, stack) * 2.6d * 0.1d) + 1);
+            recoil *= 1 - Math.min(EnchantmentHelper.getLevel(EnchantmentReg.STEADY_HANDS, stack) * 0.2d, 1.0d);
             buf.writeFloat((float)recoil);
 
             NetworkUtils.sendDataToClient(player, NetworkReg.RECOIL_CLIENT_PACKET_ID, buf);
@@ -110,15 +109,15 @@ public class GunUtils {
 
     public static void spawnBullet(LivingEntity entity, Vec3d origin, Vec3d front, ItemStack stack, Vec2f spread,
                                    boolean fireBullet, int lifespan) {
-
         World world = entity.getWorld();
-
         BulletEntity bullet = new BulletEntity(world, (float)entity.getAttributeValue(AttributeReg.RANGED_DAMAGE), lifespan, entity, fireBullet);
-
-        Vec3d bulletPos = origin.subtract(new Vec3d(0,0.2,0)).subtract(front.multiply(3.8));
+        
+        String gunType = stack.getItem().toString();
+        float bulletVelocity = (gunType == "rifle" || gunType == "netherite_rifle") ? 6.125f : 3.5f;
+        Vec3d bulletPos = origin.subtract(new Vec3d(0,0.2,0)).subtract(front.multiply((double)bulletVelocity + 0.3d));
 
         bullet.setPos(bulletPos.getX(), bulletPos.getY() - 0.1, bulletPos.getZ());
-        bullet.setVelocity(entity, entity.getPitch() + spread.y, entity.getHeadYaw() + spread.x, 0.0F, 3.5F, 0.0F);
+        bullet.setVelocity(entity, entity.getPitch() + spread.y, entity.getHeadYaw() + spread.x, 0.0F, bulletVelocity, 0.0F);
 
         bullet.velocityModified = true;
         bullet.velocityDirty = true;
@@ -128,7 +127,6 @@ public class GunUtils {
 
     public static void sendAnimationPacket(PlayerEntity player) {
         PacketByteBuf buf = PacketByteBufs.empty();
-
         NetworkUtils.sendDataToClient(player, NetworkReg.SHOOT_ANIMATION_PACKET_ID, buf);
     }
 
@@ -141,9 +139,7 @@ public class GunUtils {
             double distance = player.squaredDistanceTo(pos);
 
             if (distance > 60) {
-
-                float volume = (float) Math.max(1.0F - (distance / 400)/100, 0);
-
+                float volume = (float) Math.max(1.0f - (distance / 400) / 100, 0);
                 if (volume > 0) {
                     PacketByteBuf buf = PacketByteBufs.create();
                     buf.writeFloat(volume);

@@ -2,6 +2,7 @@ package nl.sniffiandros.bren.common.mixin;
 
 import com.llamalad7.mixinextras.sugar.Local;
 import net.minecraft.entity.attribute.EntityAttributeModifier;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -14,6 +15,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.ModifyVariable;
 import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import org.jetbrains.annotations.Nullable;
 
 import java.text.DecimalFormat;
 import java.util.UUID;
@@ -29,14 +31,24 @@ public abstract class CustomFirearmTooltips {
     }
 
     @Redirect(method = "getTooltip", at = @At(value = "INVOKE", target = "Ljava/text/DecimalFormat;format(D)Ljava/lang/String;", ordinal = 0))
-    private String modifyTooltipContents(DecimalFormat formatter, double value, @Local EntityAttributeModifier attribute) {
+    private String modifyTooltipContents(DecimalFormat formatter, double value, @Local EntityAttributeModifier attribute, @Local @Nullable PlayerEntity player) {
         String insertion = "";
         UUID attributeID = attribute.getId();
-        if (attributeID == AttributeReg.FIRE_RATE_MODIFIER_ID) {
+        if (attributeID == AttributeReg.RANGED_DAMAGE_MODIFIER_ID) {
+            if (player != null) {
+                value += player.getAttributeBaseValue(AttributeReg.RANGED_DAMAGE);
+            }
+        } else if (attributeID == AttributeReg.FIRE_RATE_MODIFIER_ID) {
             insertion = "t";
+            if (player != null) {
+                value += player.getAttributeBaseValue(AttributeReg.FIRE_RATE);
+            }
         } else if (attributeID == AttributeReg.RECOIL_MODIFIER_ID) {
             insertion = "˚";
-            value /= ((EnchantmentHelper.getLevel(EnchantmentReg.STEADY_HANDS, (ItemStack)(Object)this) * 2.6d * 0.1d) + 1);
+            value *= 1 - Math.min(EnchantmentHelper.getLevel(EnchantmentReg.STEADY_HANDS, (ItemStack)(Object)this) * 0.2d, 1.0d);
+            if (player != null) {
+                value += player.getAttributeBaseValue(AttributeReg.RECOIL);
+            }
         }
         return formatter.format(value) + insertion;
     }

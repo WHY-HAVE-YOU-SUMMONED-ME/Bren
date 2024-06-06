@@ -132,10 +132,8 @@ public class GunWithMagItem extends GunItem{
     public static ItemStack getMagazine(ItemStack stack) {
         boolean hasMag = hasMagazine(stack);
         if (hasMag) {
-
             NbtCompound nbtCompound = getMagazineNBT(stack);
             if (!nbtCompound.isEmpty()) {
-
                 String id = nbtCompound.getString("id");
                 Identifier identifier = new Identifier(id);
 
@@ -187,7 +185,6 @@ public class GunWithMagItem extends GunItem{
 
     @Override
     public void inventoryTick(ItemStack stack, World world, Entity entity, int slot, boolean selected) {
-
         if (entity instanceof IGunUser gunUser && entity instanceof PlayerEntity player) {
             ItemCooldownManager cooldownManager = player.getItemCooldownManager();
             if (selected) {
@@ -200,7 +197,7 @@ public class GunWithMagItem extends GunItem{
                                     player.getX(),
                                     player.getY(),
                                     player.getZ(),
-                                    SoundReg.ITEM_MACHINE_GUN_MAGAZINE_REMOVE,
+                                    SoundReg.ITEM_MAGAZINE_REMOVE,
                                     SoundCategory.PLAYERS, 3.0F, 1.0F - (player.getRandom().nextFloat() - 0.5F) / 4);
                         } else {
                             ItemStack mag = Bren.getMagazineFromPlayer(player, ((GunWithMagItem) stack.getItem()).compatibleMagazines());
@@ -214,7 +211,7 @@ public class GunWithMagItem extends GunItem{
                                 player.getX(),
                                 player.getY(),
                                 player.getZ(),
-                                SoundReg.ITEM_MACHINE_GUN_MAGAZINE_INSERT,
+                                SoundReg.ITEM_MAGAZINE_INSERT,
                                 SoundCategory.PLAYERS, 3.0F, 1.0F - (player.getRandom().nextFloat() - 0.5F) / 4);
                     }
                 }

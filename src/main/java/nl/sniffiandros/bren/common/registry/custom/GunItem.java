@@ -51,7 +51,6 @@ public class GunItem extends ToolItem implements Vanishable {
         return super.getAttributeModifiers(slot);
     }
 
-
     public int getMaxCapacity(ItemStack stack) {
         return 0;
     }
@@ -66,7 +65,7 @@ public class GunItem extends ToolItem implements Vanishable {
 
     @Override
     public void appendTooltip(ItemStack stack, @Nullable World world, List<Text> tooltip, TooltipContext context) {
-        tooltip.add(Text.literal(getContents(stack) + " ").append(Text.translatable(String.format("desc.%s.item.machine_gun.content", Bren.MODID)))
+        tooltip.add(Text.literal(getContents(stack) + " ").append(Text.translatable(String.format("desc.%s.item.gun_with_mag.content", Bren.MODID)))
 					.formatted(Formatting.GRAY));
         super.appendTooltip(stack, world, tooltip, context);
     }
@@ -79,7 +78,7 @@ public class GunItem extends ToolItem implements Vanishable {
     public TypedActionResult<ItemStack> use(World world, PlayerEntity user, Hand hand) {
         ItemStack stack = user.getStackInHand(hand);
 
-        if (hand == Hand.OFF_HAND) {
+        if (hand == Hand.OFF_HAND || this.isEmpty(stack)) {
             return TypedActionResult.pass(stack);
         }
 
@@ -106,11 +105,9 @@ public class GunItem extends ToolItem implements Vanishable {
     public static void shotParticles(World world, Vec3d origin, Vec3d direction, Random random) {
         for (int i = 0; i != 8; ++i) {
             double t = Math.pow(random.nextFloat(), 1.5);
-
             Vec3d p = origin.add(direction.multiply(0.8 + t));
             Vec3d v = direction.multiply(0.2 * (1 - t));
             world.addParticle(ParticleReg.MUZZLE_SMOKE_PARTICLE, p.x, p.y, p.z, v.x, v.y, v.z);
-
         }
     }
 
@@ -121,7 +118,6 @@ public class GunItem extends ToolItem implements Vanishable {
         Vec3d v = rotated.multiply(.15f).add(0,.5f + world.getRandom().nextFloat() * .1f,0);
         world.addParticle(ParticleReg.CASING_PARTICLE, p.x, p.y, p.z, v.x, v.y, v.z);
     }
-
 
     @Override
     public boolean allowNbtUpdateAnimation(PlayerEntity player, Hand hand, ItemStack oldStack, ItemStack newStack) {

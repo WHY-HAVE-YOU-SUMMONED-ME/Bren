@@ -41,7 +41,7 @@ import nl.sniffiandros.bren.common.registry.ParticleReg;
 import java.util.Iterator;
 
 public class BulletEntity extends ProjectileEntity {
-    private static final TrackedData<Integer> LIFESPAN = DataTracker.registerData(BulletEntity.class, TrackedDataHandlerRegistry.INTEGER);;
+    private static final TrackedData<Integer> LIFESPAN = DataTracker.registerData(BulletEntity.class, TrackedDataHandlerRegistry.INTEGER);
     private float damage;
     private boolean onFire;
 
@@ -160,7 +160,6 @@ public class BulletEntity extends ProjectileEntity {
         super.onBlockHit(blockHitResult);
         BlockPos pos = blockHitResult.getBlockPos();
         BlockState state = this.getWorld().getBlockState(pos);
-
         Vec3d vec3d = blockHitResult.getPos();
 
         if (!state.isAir() && state.isSolid() && this.age > 1) {
@@ -173,10 +172,9 @@ public class BulletEntity extends ProjectileEntity {
 
                 if (this.getWorld().isClient()) {
                     for (int i = 0; i < 4; ++i) {
-
-                        float x = this.random.nextFloat() - .5f;
-                        float y = this.random.nextFloat() - .5f;
-                        float z = this.random.nextFloat() - .5f;
+                        float x = this.random.nextFloat() - 0.5f;
+                        float y = this.random.nextFloat() - 0.5f;
+                        float z = this.random.nextFloat() - 0.5f;
 
                         this.getWorld().addParticle(new BlockStateParticleEffect(ParticleTypes.BLOCK, state), vec3d.x,vec3d.y,vec3d.z, x, y, z);
                     }
