@@ -37,21 +37,15 @@ public class TradeRandomGunFactory implements TradeOffers.Factory {
         this.exp = exp;
     }
 
-
-
     @Nullable
     @Override
     public TradeOffer create(Entity entity, Random random) {
-
         Item item = (Item) GUNS.toArray()[random.nextBetween(0, GUNS.size() - 1)];
 
         int i = 5 + random.nextInt(15);
         ItemStack itemStack = EnchantmentHelper.enchant(random, new ItemStack(item), i, false);
         int j = Math.min(this.price + i, 64);
         ItemStack itemStack2 = new ItemStack(Items.EMERALD, j);
-
-
-
         return new TradeOffer(itemStack2, itemStack,1,this.exp,.23f);
     }
 }

@@ -26,7 +26,6 @@ public class MagazineItem extends Item {
     public MagazineItem(Settings settings, int capacity) {
         super(settings.maxCount(1));
         this.capacity = capacity;
-
     }
 
     @Override
@@ -41,11 +40,9 @@ public class MagazineItem extends Item {
 
     @Override
     public void inventoryTick(ItemStack stack, World world, Entity entity, int slot, boolean selected) {
-
         if (EnchantmentHelper.getLevel(EnchantmentReg.AUTOFILL, stack) > 0 && entity instanceof PlayerEntity player) {
             AutofillEnchantment.insert(stack, player);
         }
-
         super.inventoryTick(stack, world, entity, slot, selected);
     }
 
@@ -112,7 +109,6 @@ public class MagazineItem extends Item {
     public static int fillMagazine(ItemStack mag, int amount) {
         if (mag.getItem() instanceof MagazineItem) {
             int original = getContents(mag);
-
             int i = Math.min(getContents(mag) + amount, getMaxCapacity(mag));
             mag.getOrCreateNbt().putInt("Contents", i);
 

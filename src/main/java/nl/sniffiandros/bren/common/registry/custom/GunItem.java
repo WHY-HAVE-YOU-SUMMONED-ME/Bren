@@ -32,7 +32,6 @@ public class GunItem extends ToolItem implements Vanishable {
     private final SoundEvent shootSound;
     private final SoundEvent silentShootSound;
 
-
     public GunItem(Settings settings, ToolMaterial material, GunProperties gunProperties) {
         super(material, settings.maxDamageIfAbsent((int) (material.getDurability() * 1.5)));
         this.shootSound = gunProperties.sound;
@@ -105,7 +104,6 @@ public class GunItem extends ToolItem implements Vanishable {
     }
 
     public static void shotParticles(World world, Vec3d origin, Vec3d direction, Random random) {
-
         for (int i = 0; i != 8; ++i) {
             double t = Math.pow(random.nextFloat(), 1.5);
 

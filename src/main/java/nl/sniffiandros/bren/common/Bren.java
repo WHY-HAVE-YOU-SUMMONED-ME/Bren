@@ -44,7 +44,6 @@ public class Bren implements ModInitializer {
 
 	public static LongShootingCriterion LONG_SHOOTING = Criteria.register(new LongShootingCriterion());
 
-
 	@Override
 	public void onInitialize() {
 		AttributeReg.reg();
@@ -115,7 +114,8 @@ public class Bren implements ModInitializer {
 		if (player.getOffHandStack().isIn(magTag)) {
 			if (!MagazineItem.isEmpty(player.getOffHandStack())) return player.getOffHandStack();
 		}
-		for(int i = 0; i < inventory.size(); ++i) {
+
+		for (int i = 0; i < inventory.size(); ++i) {
 			ItemStack itemStack = inventory.getStack(i);
 			if (itemStack.isIn(magTag)) {
 				if (!MagazineItem.isEmpty(itemStack) && MagazineItem.getContents(itemStack) > MagazineItem.getContents(fullestMag)) {
@@ -132,7 +132,8 @@ public class Bren implements ModInitializer {
 		if (player.getOffHandStack().isOf(item)) {
 			return player.getOffHandStack();
 		}
-		for(int i = 0; i < inventory.size(); ++i) {
+
+		for (int i = 0; i < inventory.size(); ++i) {
 			ItemStack itemStack = inventory.getStack(i);
 			if (itemStack.isOf(item)) {
 				return itemStack;

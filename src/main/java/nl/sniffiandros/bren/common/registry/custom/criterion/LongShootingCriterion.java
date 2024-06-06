@@ -18,12 +18,10 @@ import nl.sniffiandros.bren.common.entity.IGunUser;
 public class LongShootingCriterion extends AbstractCriterion<LongShootingCriterion.Conditions> {
     static final Identifier ID = new Identifier(Bren.MODID, "shooting");
 
-
     public Conditions conditionsFromJson(JsonObject jsonObject, LootContextPredicate lootContextPredicate, AdvancementEntityPredicateDeserializer advancementEntityPredicateDeserializer) {
         ItemPredicate itemPredicate = ItemPredicate.fromJson(jsonObject.get("firearm"));
         return new Conditions(lootContextPredicate, itemPredicate);
     }
-
 
     @Override
     public Identifier getId() {

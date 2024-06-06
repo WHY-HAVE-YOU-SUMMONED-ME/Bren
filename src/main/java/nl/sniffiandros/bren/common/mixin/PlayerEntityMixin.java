@@ -66,9 +66,7 @@ public abstract class PlayerEntityMixin extends LivingEntity implements IGunUser
     }
 
     public void handleShooting() {
-
         ItemCooldownManager c = this.getItemCooldownManager();
-
 
         if (this.canShoot((stack -> {
             boolean b = true;
@@ -148,8 +146,6 @@ public abstract class PlayerEntityMixin extends LivingEntity implements IGunUser
             if (handItem.getItem() instanceof GunItem) {
                 this.lastEquippedGun = handItem;
             }
-
-
             if (!handItem.equals(this.lastEquippedGun)) {
                 this.lastGun = this.lastEquippedGun;
             } else {

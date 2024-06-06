@@ -36,8 +36,6 @@ public class TradeRandomGunEnchantmentFactory implements TradeOffers.Factory {
         this.exp = exp;
     }
 
-
-
     @Nullable
     @Override
     public TradeOffer create(Entity entity, Random random) {

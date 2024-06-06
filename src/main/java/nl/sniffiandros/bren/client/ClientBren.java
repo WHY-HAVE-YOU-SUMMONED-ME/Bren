@@ -48,7 +48,6 @@ public class ClientBren implements ClientModInitializer {
 
         BlockRenderLayerMap.INSTANCE.putBlock(BlockReg.WORKBENCH, RenderLayer.getCutout());
 
-
         ClientNetworkReg.shootPacket();
         ClientNetworkReg.clientShootPacket();
         ClientNetworkReg.shootAnimationPacket();

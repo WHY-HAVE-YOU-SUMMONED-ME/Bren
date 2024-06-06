@@ -52,13 +52,9 @@ public class ShotgunItem extends GunItem{
     public void onReload(PlayerEntity player) {
         ItemStack stack = player.getMainHandStack();
         ItemCooldownManager cooldownManager = player.getItemCooldownManager();
-
-
-
         if (stack.getItem() instanceof ShotgunItem) {
 
             if (player instanceof IGunUser gunUser && !cooldownManager.isCoolingDown(stack.getItem())) {
-
                 ItemStack bullets = Bren.getItemFromPlayer(player, ItemReg.SHELL);
 
                 if (!gunUser.canReload() || bullets.isEmpty() || getContents(stack) >= getMaxCapacity(stack)) {
@@ -87,7 +83,6 @@ public class ShotgunItem extends GunItem{
 
                 if (gunUser.getGunState().equals(GunHelper.GunStates.RELOADING)) {
                     if (!cooldownManager.isCoolingDown(stack.getItem())) {
-
                         ItemStack bullets = Bren.getItemFromPlayer(player, ItemReg.SHELL);
 
                         bullets.decrement(1);

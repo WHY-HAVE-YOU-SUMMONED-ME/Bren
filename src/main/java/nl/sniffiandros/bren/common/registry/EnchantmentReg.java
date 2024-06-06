@@ -16,7 +16,6 @@ public class EnchantmentReg {
     public static Enchantment SILENCED = register("silenced", new SilencedEnchantment(Enchantment.Rarity.UNCOMMON));
     public static Enchantment STEADY_HANDS = register("steady_hands", new SteadyHandsEnchantment(Enchantment.Rarity.RARE));
 
-
     private static Enchantment register(String name, Enchantment enchantment) {
         return Registry.register(Registries.ENCHANTMENT, new Identifier(Bren.MODID, name), enchantment);
     }

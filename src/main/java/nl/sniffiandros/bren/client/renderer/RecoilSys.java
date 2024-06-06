@@ -24,8 +24,6 @@ public class RecoilSys {
     }
 
     public static void tick(MinecraftClient client) {
-       // MinecraftClient client = MinecraftClient.getInstance();
-
         PlayerEntity player = client.player;
 
         if (player == null) { return;}

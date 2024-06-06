@@ -19,7 +19,6 @@ import java.util.List;
 import java.util.Set;
 
 public class TradeClothedMagFactory implements TradeOffers.Factory {
-
     private final int price;
     private final int exp;
 
@@ -28,16 +27,11 @@ public class TradeClothedMagFactory implements TradeOffers.Factory {
         this.exp = exp;
     }
 
-
-
     @Nullable
     @Override
     public TradeOffer create(Entity entity, Random random) {
-
         ItemStack stack = new ItemStack(ItemReg.CLOTHED_MAGAZINE);
-
         int i = random.nextInt(3) + 1;
-
         List<DyeItem> list = new ArrayList<>();
 
         for (int i1 = 0; i1 < i; ++i1){
@@ -47,7 +41,6 @@ public class TradeClothedMagFactory implements TradeOffers.Factory {
         }
 
         ItemStack clothed_mag = DyeableItem.blendAndSetColor(stack,list);
-
         return new TradeOffer(new ItemStack(Items.EMERALD,this.price), clothed_mag,12,this.exp,.26f);
     }
 }

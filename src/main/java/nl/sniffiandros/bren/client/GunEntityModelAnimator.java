@@ -17,14 +17,12 @@ public class GunEntityModelAnimator {
     ModelPart leftArm, ModelPart rightArm, ModelPart head, float gunAmount) {
 
         if (livingEntity instanceof IGunUser gunUser && !livingEntity.isSleeping()) {
-
             boolean reloading = gunUser.getGunState().equals(GunHelper.GunStates.RELOADING);
             float kick = 2.5F;
 
             gunAmount = Math.max(gunAmount - 0.15F, 0);
             float f = (((float)gunUser.getGunTicks()/16) + gunAmount)/2;
             float f1 = (float) (Math.sin(f)/Math.PI) * (kick/2);
-
 
             boolean isLeftHanded = livingEntity.getMainArm().equals(Arm.LEFT);
             ModelPart arm = isLeftHanded ? leftArm : rightArm;
@@ -49,7 +47,6 @@ public class GunEntityModelAnimator {
             other_arm.yaw = (isLeftHanded ? -1.090831F - y : 1.090831F + y) + (p/2) * l + f3/3;
 
             head.yaw = y - 0.7853982F * l;
-
         }
     }
 }

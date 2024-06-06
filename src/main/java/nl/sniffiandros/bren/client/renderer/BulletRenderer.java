@@ -19,7 +19,6 @@ public class BulletRenderer<T extends BulletEntity> extends EntityRenderer<T> {
 
     @Override
     public void render(T entity, float yaw, float tickDelta, MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light) {
-
         if (entity.age > 2) {
             ClientBren.renderImage(
                     this.getTexture(entity),

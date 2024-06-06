@@ -38,7 +38,6 @@ public class MachineGunBackFeatureRenderer <T extends LivingEntity, M extends Bi
         if (stack == null) return;
 
         if (!stack.isEmpty()) {
-
             matrices.push();
 
             ModelPart modelPart = this.getContextModel().body;

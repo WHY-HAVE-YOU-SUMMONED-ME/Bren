@@ -32,13 +32,8 @@ public class GunWithMagItem extends GunItem{
     public void onReload(PlayerEntity player) {
         ItemStack stack = player.getMainHandStack();
         ItemCooldownManager cooldownManager = player.getItemCooldownManager();
-
-
-
         if (stack.getItem() instanceof GunWithMagItem gunItem) {
-
             if (player instanceof IGunUser gunUser && !cooldownManager.isCoolingDown(stack.getItem())) {
-
                 ItemStack mag = Bren.getMagazineFromPlayer(player, gunItem.compatibleMagazines());
 
                 if (!GunWithMagItem.hasMagazine(stack) && mag.isEmpty()) {
@@ -59,7 +54,6 @@ public class GunWithMagItem extends GunItem{
         if (!(mag.getItem() instanceof MagazineItem)) {
             return;
         }
-
         NbtCompound magNBT = new NbtCompound();
 
         mag.writeNbt(magNBT);
@@ -117,8 +111,6 @@ public class GunWithMagItem extends GunItem{
             ItemStack mag = new ItemStack(Registries.ITEM.get(identifier));
             return mag.getItem() instanceof ColorableMagazineItem;
         }
-
-
         return false;
     }
 
@@ -155,7 +147,6 @@ public class GunWithMagItem extends GunItem{
         return ItemStack.EMPTY;
     }
 
-
     public static ItemStack unloadMagazine(ItemStack stack, PlayerEntity player) {
         if (!(stack.getItem() instanceof GunItem)) {
             return ItemStack.EMPTY;
@@ -163,7 +154,6 @@ public class GunWithMagItem extends GunItem{
 
         ItemStack mag = getMagazine(stack);
         if (!mag.isEmpty()) {
-
             int empty_slot = player.getInventory().getEmptySlot();
             if (empty_slot != -1) {
                 player.getInventory().setStack(empty_slot, mag);
@@ -174,7 +164,6 @@ public class GunWithMagItem extends GunItem{
             }
 
             stack.getNbt().put("Magazine", new NbtCompound());
-
             return mag;
         }
         return ItemStack.EMPTY;
@@ -183,11 +172,9 @@ public class GunWithMagItem extends GunItem{
     @Override
     public boolean isEmpty(ItemStack stack) {
         boolean b = false;
-
         if (stack.getItem() instanceof GunItem gunItem) {
             b = gunItem.getContents(stack) <= 0;
         }
-
         return b || !hasMagazine(stack);
     }
     @Override
@@ -215,7 +202,6 @@ public class GunWithMagItem extends GunItem{
                                     player.getZ(),
                                     SoundReg.ITEM_MACHINE_GUN_MAGAZINE_REMOVE,
                                     SoundCategory.PLAYERS, 3.0F, 1.0F - (player.getRandom().nextFloat() - 0.5F) / 4);
-
                         } else {
                             ItemStack mag = Bren.getMagazineFromPlayer(player, ((GunWithMagItem) stack.getItem()).compatibleMagazines());
                             GunWithMagItem.putMagazine(stack, mag);
@@ -231,12 +217,9 @@ public class GunWithMagItem extends GunItem{
                                 SoundReg.ITEM_MACHINE_GUN_MAGAZINE_INSERT,
                                 SoundCategory.PLAYERS, 3.0F, 1.0F - (player.getRandom().nextFloat() - 0.5F) / 4);
                     }
-
                 }
-
             }
         }
-
         super.inventoryTick(stack, world, entity, slot, selected);
     }
 

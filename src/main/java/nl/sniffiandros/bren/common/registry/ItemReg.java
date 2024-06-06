@@ -11,7 +11,6 @@ import nl.sniffiandros.bren.common.Bren;
 import nl.sniffiandros.bren.common.registry.custom.*;
 
 public class ItemReg {
-
     public static final int MACHINE_GUN_RECOIL = 15;
     public static final int AUTO_GUN_RECOIL = 10;
     public static final int RIFLE_RECOIL = 30;

@@ -14,14 +14,12 @@ public class WorkbenchBlock extends Block {
     public VoxelShape shape(){
         VoxelShape shape = VoxelShapes.empty();
         shape = VoxelShapes.union(shape, VoxelShapes.cuboid(0, 0, 0, 1, 0.875, 1));
-
         return shape;
     }
 
     public WorkbenchBlock(Settings settings) {
         super(settings.nonOpaque());
     }
-
 
     public VoxelShape getOutlineShape(BlockState state, BlockView world, BlockPos pos, ShapeContext context) {
         Vec3d vec3d = state.getModelOffset(world, pos);

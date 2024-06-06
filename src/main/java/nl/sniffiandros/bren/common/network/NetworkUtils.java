@@ -32,7 +32,6 @@ public class NetworkUtils {
         if (server != null) {
             PlayerManager manager = server.getPlayerManager();
             if (manager != null) {
-
                 ServerPlayerEntity serverPlayer = manager.getPlayer(player.getUuid());
                 if (serverPlayer != null) {
                     ServerPlayNetworking.send(serverPlayer, packet, buf);

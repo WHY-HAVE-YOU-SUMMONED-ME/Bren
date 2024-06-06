@@ -40,14 +40,11 @@ public class ItemRendererMixin {
 
     @ModifyVariable(at = @At("HEAD"), method = "renderItem(Lnet/minecraft/item/ItemStack;Lnet/minecraft/client/render/model/json/ModelTransformationMode;ZLnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/client/render/VertexConsumerProvider;IILnet/minecraft/client/render/model/BakedModel;)V", argsOnly = true)
     private BakedModel editGuiModel(BakedModel defaultModel, ItemStack stack, ModelTransformationMode renderMode) {
-
         if (renderMode == ModelTransformationMode.GUI || renderMode == ModelTransformationMode.FIXED || renderMode == ModelTransformationMode.GROUND) {
             if (stack.getItem() instanceof GunItem) {
                 return bakeGuiModel(stack);
             }
-
         }
-
         return defaultModel;
     }
 
@@ -62,7 +59,6 @@ public class ItemRendererMixin {
             bakedModel = !GunWithMagItem.hasColorableMagazine(stack) ?
                     this.models.getModelManager().getModel(new ModelIdentifier(Bren.MODID, formattedName + "_with_magazine_gui", "inventory")) :
                     this.models.getModelManager().getModel(new ModelIdentifier(Bren.MODID, formattedName + "_with_clothed_magazine_gui", "inventory"));
-
         }
         return bakedModel;
     }
@@ -86,7 +82,6 @@ public class ItemRendererMixin {
                         f1 = cooldownManager.getCooldownProgress(item.getItem(), delta);
                         f1 = Math.max(f1 - 0.15F, 0);
                     }
-
 
                     float f = 1 - WeaponTickHolder.getAnimationTicks(delta)/16;
                     boolean reloading = gunUser.getGunState().equals(GunHelper.GunStates.RELOADING);

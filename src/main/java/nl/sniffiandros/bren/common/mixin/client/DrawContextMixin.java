@@ -30,7 +30,6 @@ public abstract class DrawContextMixin {
         if (!stack.isEmpty()) {
             this.matrices.push();
             if (stack.getItem() instanceof GunItem gunItem) {
-
                 if (showBar(stack)) {
                     int m = gunItem.getMaxCapacity(stack);
                     int i = m > 0 ? Math.round(((float) gunItem.getContents(stack) / m) * 13) : 0;

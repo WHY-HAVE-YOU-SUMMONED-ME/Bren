@@ -39,9 +39,6 @@ public class ClientNetworkReg {
             float volume = buf.readFloat();
 
             client.execute(() -> {
-
-
-
                 World world = client.world;
                 if (world != null) {
 

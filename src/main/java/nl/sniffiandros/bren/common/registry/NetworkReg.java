@@ -27,7 +27,6 @@ public class NetworkReg {
     public static final Identifier SHOOT_ANIMATION_PACKET_ID = new Identifier(Bren.MODID, "shoot_animation");
     public static final Identifier RELOAD_PACKET_ID = new Identifier(Bren.MODID, "reload");
 
-
     public static void reloadPacket() {
         ServerPlayNetworking.registerGlobalReceiver(NetworkReg.RELOAD_PACKET_ID, (server, player, handler, buf, responseSender) -> {
             server.execute(() -> {

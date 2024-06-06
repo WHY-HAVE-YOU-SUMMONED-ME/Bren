@@ -30,13 +30,11 @@ import java.util.UUID;
 
 
 public class GunUtils {
-
     public static int fire(LivingEntity user) {
-
         World world = user.getWorld();
         ItemStack stack = user.getMainHandStack();
 
-        if (!(stack.getItem() instanceof GunItem gunItem)) { return 0;}
+        if (!(stack.getItem() instanceof GunItem gunItem)) return 0;
 
         if (!((IGunUser)user).getGunState().equals(GunHelper.GunStates.NORMAL)) { return 0;}
 
@@ -57,7 +55,6 @@ public class GunUtils {
         int fireRate = (int)Math.round(user.getAttributeValue(AttributeReg.FIRE_RATE));
 
         if (!world.isClient()) {
-
             if (user.isPlayer()) {
                 stack.damage(1, user, (p) -> p.sendToolBreakStatus(Hand.MAIN_HAND));
             }
@@ -79,8 +76,6 @@ public class GunUtils {
                 GunUtils.spawnBullet(user, origin, front, stack, new Vec2f(x,y), false, gunItem.bulletLifespan());
             }
         }
-
-
 
         if (user instanceof PlayerEntity player) {
             PacketByteBuf buf = PacketByteBufs.create();

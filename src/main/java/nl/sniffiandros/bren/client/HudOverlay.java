@@ -17,9 +17,6 @@ public class HudOverlay implements HudRenderCallback {
     private static final Identifier BULLET_ICONS = new Identifier(Bren.MODID,
             "textures/gui/bullet_icons.png");
 
-
-
-
     @Override
     public void onHudRender(DrawContext context, float tickDelta) {
         PlayerEntity player = null;
@@ -57,9 +54,6 @@ public class HudOverlay implements HudRenderCallback {
         } else {
             return;
         }
-
-
-
 
         client.getProfiler().push("machine_gun_bullets");
 
