@@ -5,16 +5,15 @@ import net.minecraft.sound.SoundEvent;
 public class GunProperties {
 
     public int recoil;
-    float rangeDamage;
+    float rangedDamage;
     int fireRate;
     SoundEvent sound;
-    MagazineItem magazineItem;
     SoundEvent silentSound;
 
     public GunProperties() {}
 
-    public GunProperties rangeDamage(float damage) {
-        this.rangeDamage = damage;
+    public GunProperties rangedDamage(float damage) {
+        this.rangedDamage = damage;
         return this;
     }
     public GunProperties fireRate(int rate) {
@@ -28,10 +27,6 @@ public class GunProperties {
     public GunProperties shootSound(SoundEvent sound, SoundEvent silent) {
         this.sound = sound;
         this.silentSound = silent;
-        return this;
-    }
-    public GunProperties magazine(MagazineItem magazineItem) {
-        this.magazineItem = magazineItem;
         return this;
     }
 }

@@ -1,12 +1,17 @@
 package nl.sniffiandros.bren.common.registry.custom;
 
+import com.google.common.collect.ImmutableMultimap;
+import com.google.common.collect.Multimap;
 import net.minecraft.client.item.TooltipContext;
-import net.minecraft.enchantment.EnchantmentHelper;
+import net.minecraft.entity.EquipmentSlot;
+import net.minecraft.entity.attribute.EntityAttribute;
+import net.minecraft.entity.attribute.EntityAttributeModifier;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.*;
 import net.minecraft.sound.SoundEvent;
 import net.minecraft.text.Text;
 import net.minecraft.util.Hand;
+import net.minecraft.util.Formatting;
 import net.minecraft.util.TypedActionResult;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.math.random.Random;
@@ -14,32 +19,37 @@ import net.minecraft.world.World;
 import nl.sniffiandros.bren.common.Bren;
 import nl.sniffiandros.bren.common.config.MConfig;
 import nl.sniffiandros.bren.common.entity.IGunUser;
-import nl.sniffiandros.bren.common.registry.EnchantmentReg;
+import nl.sniffiandros.bren.common.registry.AttributeReg;
 import nl.sniffiandros.bren.common.registry.ParticleReg;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
+import java.util.UUID;
 
 public class GunItem extends ToolItem implements Vanishable {
-    private final float rangeDamage;
-    private final int fireRate;
+    private final Multimap<EntityAttribute, EntityAttributeModifier> attributeModifiers;
+
     private final SoundEvent shootSound;
     private final SoundEvent silentShootSound;
-    private final int recoil;
 
 
     public GunItem(Settings settings, ToolMaterial material, GunProperties gunProperties) {
         super(material, settings.maxDamageIfAbsent((int) (material.getDurability() * 1.5)));
-        this.rangeDamage = gunProperties.rangeDamage;
-        this.fireRate = gunProperties.fireRate;
         this.shootSound = gunProperties.sound;
         this.silentShootSound = gunProperties.silentSound;
-        this.recoil = gunProperties.recoil;
+        ImmutableMultimap.Builder<EntityAttribute, EntityAttributeModifier> builder = ImmutableMultimap.builder();
+        builder.put(AttributeReg.RANGED_DAMAGE, new EntityAttributeModifier(AttributeReg.RANGED_DAMAGE_MODIFIER_ID, "Weapon modifier", gunProperties.rangedDamage, EntityAttributeModifier.Operation.ADDITION));
+        builder.put(AttributeReg.FIRE_RATE, new EntityAttributeModifier(AttributeReg.FIRE_RATE_MODIFIER_ID, "Weapon modifier", gunProperties.fireRate, EntityAttributeModifier.Operation.ADDITION));
+        builder.put(AttributeReg.RECOIL, new EntityAttributeModifier(AttributeReg.RECOIL_MODIFIER_ID, "Weapon modifier", gunProperties.recoil, EntityAttributeModifier.Operation.ADDITION));
+        this.attributeModifiers = builder.build();
     }
 
-    public float getRecoil(ItemStack stack) {
-        float reduction = ((float) EnchantmentHelper.getLevel(EnchantmentReg.STEADY_HANDS, stack) * 2.6F / 10) + 1;
-        return this.recoil * MConfig.recoilMultiplier.get() / reduction;
+    @Override
+    public Multimap<EntityAttribute, EntityAttributeModifier> getAttributeModifiers(EquipmentSlot slot) {
+        if (slot == EquipmentSlot.MAINHAND) {
+            return this.attributeModifiers;
+        }
+        return super.getAttributeModifiers(slot);
     }
 
 
@@ -57,15 +67,10 @@ public class GunItem extends ToolItem implements Vanishable {
 
     @Override
     public void appendTooltip(ItemStack stack, @Nullable World world, List<Text> tooltip, TooltipContext context) {
-        Bren.buildToolTip(tooltip, stack);
-
+        tooltip.add(Text.literal(getContents(stack) + " ").append(Text.translatable(String.format("desc.%s.item.machine_gun.content", Bren.MODID)))
+					.formatted(Formatting.GRAY));
         super.appendTooltip(stack, world, tooltip, context);
     }
-
-    public int getFireRate() {
-        return this.fireRate;
-    }
-
 
     public void onReload(PlayerEntity player) {
 
@@ -84,13 +89,6 @@ public class GunItem extends ToolItem implements Vanishable {
         }
 
         return super.use(world, user, hand);
-    }
-
-    public static float rangeDamage(ItemStack stack) {
-        if (stack.getItem() instanceof GunItem machineGun) {
-            return machineGun.rangeDamage;
-        }
-        return 0;
     }
 
     public boolean isEmpty(ItemStack stack) {

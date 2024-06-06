@@ -13,9 +13,11 @@ import net.minecraft.util.math.Vec2f;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import nl.sniffiandros.bren.common.Bren;
+import nl.sniffiandros.bren.common.config.MConfig;
 import nl.sniffiandros.bren.common.entity.BulletEntity;
 import nl.sniffiandros.bren.common.entity.IGunUser;
 import nl.sniffiandros.bren.common.network.NetworkUtils;
+import nl.sniffiandros.bren.common.registry.AttributeReg;
 import nl.sniffiandros.bren.common.registry.EnchantmentReg;
 import nl.sniffiandros.bren.common.registry.ItemReg;
 import nl.sniffiandros.bren.common.registry.NetworkReg;
@@ -52,7 +54,7 @@ public class GunUtils {
             GunUtils.playDistantGunFire(world, user.getPos());
         }
 
-        int fireRate = gunItem.getFireRate();
+        int fireRate = (int)Math.round(user.getAttributeValue(AttributeReg.FIRE_RATE));
 
         if (!world.isClient()) {
 
@@ -82,7 +84,10 @@ public class GunUtils {
 
         if (user instanceof PlayerEntity player) {
             PacketByteBuf buf = PacketByteBufs.create();
-            buf.writeFloat(((GunItem) stack.getItem()).getRecoil(stack));
+            double recoil = user.getAttributeValue(AttributeReg.RECOIL);
+            recoil *= MConfig.recoilMultiplier.get();
+            recoil /= ((EnchantmentHelper.getLevel(EnchantmentReg.STEADY_HANDS, stack) * 2.6d * 0.1d) + 1);
+            buf.writeFloat((float)recoil);
 
             NetworkUtils.sendDataToClient(player, NetworkReg.RECOIL_CLIENT_PACKET_ID, buf);
         }
@@ -113,7 +118,7 @@ public class GunUtils {
 
         World world = entity.getWorld();
 
-        BulletEntity bullet = new BulletEntity(world, GunItem.rangeDamage(stack), lifespan, entity, fireBullet);
+        BulletEntity bullet = new BulletEntity(world, (float)entity.getAttributeValue(AttributeReg.RANGED_DAMAGE), lifespan, entity, fireBullet);
 
         Vec3d bulletPos = origin.subtract(new Vec3d(0,0.2,0)).subtract(front.multiply(3.8));
 

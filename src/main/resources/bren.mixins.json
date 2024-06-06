@@ -3,6 +3,7 @@
   "package": "nl.sniffiandros.bren.common.mixin",
   "compatibilityLevel": "JAVA_17",
   "mixins": [
+    "CustomFirearmTooltips",
     "PlayerEntityMixin",
     "StructurePoolAccessor"
   ],

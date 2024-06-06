@@ -47,6 +47,7 @@ public class Bren implements ModInitializer {
 
 	@Override
 	public void onInitialize() {
+		AttributeReg.reg();
 		ItemReg.reg();
 		BlockReg.reg();
 		SoundReg.reg();
@@ -124,35 +125,6 @@ public class Bren implements ModInitializer {
 		}
 		return fullestMag;
 	}
-	public static void buildToolTip(List<Text> tooltip, ItemStack stack) {
-
-		if (stack.getItem() instanceof GunItem gunItem) {
-			tooltip.add(Text.literal(gunItem.getContents(stack) + " ").append(Text.translatable(String.format("desc.%s.item.machine_gun.content", Bren.MODID)))
-					.formatted(Formatting.GRAY));
-		}
-
-		GunItem gunItem = (GunItem) stack.getItem();
-
-		float rangeDamage = GunItem.rangeDamage(stack);
-		int fireRate = gunItem.getFireRate();
-		float recoil = gunItem.getRecoil(stack);
-
-		String dmg = SMathHelper.roundNumberStr(rangeDamage);
-		String rate = SMathHelper.roundNumberStr(fireRate);
-		String rec = SMathHelper.roundNumberStr(Math.round(recoil));
-
-		tooltip.add(Text.literal(dmg + " ")
-				.append(Text.translatable(String.format("desc.%s.item.machine_gun.range_damage", MODID))).formatted(Formatting.DARK_GREEN));
-
-		tooltip.add(Text.literal(rate + "t ")
-				.append(Text.translatable(String.format("desc.%s.item.machine_gun.fire_rate", MODID))).formatted(Formatting.DARK_GREEN));
-
-		tooltip.add(Text.literal(rec + "° ")
-				.append(Text.translatable(String.format("desc.%s.item.machine_gun.recoil", MODID))).formatted(Formatting.DARK_GREEN));
-
-	}
-
-
 
 	public static ItemStack getItemFromPlayer(PlayerEntity player, Item item) {
 		Inventory inventory = player.getInventory();

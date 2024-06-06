@@ -20,11 +20,8 @@
   "enchantment.bren.overflow": "Overflow",
   "enchantment.bren.autofill": "Autofill",
   "enchantment.bren.steady_hands": "Steady Hands",
-
+  
   "desc.bren.item.machine_gun.content": "Rounds",
-  "desc.bren.item.machine_gun.range_damage": "Range Damage",
-  "desc.bren.item.machine_gun.fire_rate": "Fire Rate",
-  "desc.bren.item.machine_gun.recoil": "Recoil",
   "desc.bren.item.magazine.content": "Ammo",
 
   "block.bren.workbench": "Workbench",
@@ -42,6 +39,10 @@
   "bren.entity.villager.work_gunsmith": "Gunsmith works",
 
   "death.attack.bullet": "%1$s was gunned down by %2$s!",
+
+  "attribute.name.ranged_damage": "Ranged Damage",
+  "attribute.name.fire_rate": "Fire Rate",
+  "attribute.name.recoil": "Recoil",
 
   "advancements.bren.adventure.auto_loader_contraption.description": "Obtain an AutoLoader Contraption",
   "advancements.bren.adventure.auto_loader_contraption.title": "A whaaa...?!",
