@@ -34,13 +34,11 @@ public class GunItem extends ToolItem implements Vanishable {
 
     private final SoundEvent shootSound;
     private final SoundEvent silentShootSound;
-    private final float effectiveRange;
 
     public GunItem(Settings settings, ToolMaterial material, GunProperties gunProperties) {
         super(material, settings.maxDamageIfAbsent((int) (material.getDurability() * 1.5)));
         this.shootSound = gunProperties.sound;
         this.silentShootSound = gunProperties.silentSound;
-        this.effectiveRange = gunProperties.effectiveRange;
         ImmutableMultimap.Builder<EntityAttribute, EntityAttributeModifier> builder = ImmutableMultimap.builder();
         builder.put(AttributeReg.RANGED_DAMAGE, new EntityAttributeModifier(AttributeReg.RANGED_DAMAGE_MODIFIER_ID, "Weapon modifier", gunProperties.rangedDamage, EntityAttributeModifier.Operation.ADDITION));
         builder.put(AttributeReg.FIRE_RATE, new EntityAttributeModifier(AttributeReg.FIRE_RATE_MODIFIER_ID, "Weapon modifier", gunProperties.fireRate, EntityAttributeModifier.Operation.ADDITION));
