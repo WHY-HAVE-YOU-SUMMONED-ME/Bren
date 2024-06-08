@@ -6,6 +6,7 @@ import net.minecraft.client.item.TooltipContext;
 import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.attribute.EntityAttribute;
 import net.minecraft.entity.attribute.EntityAttributeModifier;
+import net.minecraft.entity.player.ItemCooldownManager;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.*;
 import net.minecraft.sound.SoundEvent;
@@ -20,7 +21,9 @@ import nl.sniffiandros.bren.common.Bren;
 import nl.sniffiandros.bren.common.config.MConfig;
 import nl.sniffiandros.bren.common.entity.IGunUser;
 import nl.sniffiandros.bren.common.registry.AttributeReg;
+import nl.sniffiandros.bren.common.registry.ItemReg;
 import nl.sniffiandros.bren.common.registry.ParticleReg;
+import nl.sniffiandros.bren.common.utils.GunHelper;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
@@ -31,11 +34,13 @@ public class GunItem extends ToolItem implements Vanishable {
 
     private final SoundEvent shootSound;
     private final SoundEvent silentShootSound;
+    private final float effectiveRange;
 
     public GunItem(Settings settings, ToolMaterial material, GunProperties gunProperties) {
         super(material, settings.maxDamageIfAbsent((int) (material.getDurability() * 1.5)));
         this.shootSound = gunProperties.sound;
         this.silentShootSound = gunProperties.silentSound;
+        this.effectiveRange = gunProperties.effectiveRange;
         ImmutableMultimap.Builder<EntityAttribute, EntityAttributeModifier> builder = ImmutableMultimap.builder();
         builder.put(AttributeReg.RANGED_DAMAGE, new EntityAttributeModifier(AttributeReg.RANGED_DAMAGE_MODIFIER_ID, "Weapon modifier", gunProperties.rangedDamage, EntityAttributeModifier.Operation.ADDITION));
         builder.put(AttributeReg.FIRE_RATE, new EntityAttributeModifier(AttributeReg.FIRE_RATE_MODIFIER_ID, "Weapon modifier", gunProperties.fireRate, EntityAttributeModifier.Operation.ADDITION));
@@ -114,8 +119,8 @@ public class GunItem extends ToolItem implements Vanishable {
     public static void ejectCasingParticle(World world, Vec3d origin, Vec3d direction, Random random) {
         Vec3d rotated = direction.rotateY((float) (-Math.PI/2));
 
-        Vec3d p = origin.add(direction.multiply(.3f)).add(rotated.multiply(.26));
-        Vec3d v = rotated.multiply(.15f).add(0,.5f + world.getRandom().nextFloat() * .1f,0);
+        Vec3d p = origin.add(direction.multiply(0.3f)).add(rotated.multiply(0.26));
+        Vec3d v = rotated.multiply(0.15f).add(0, 0.5f + world.getRandom().nextFloat() * 0.1f, 0);
         world.addParticle(ParticleReg.CASING_PARTICLE, p.x, p.y, p.z, v.x, v.y, v.z);
     }
 
@@ -124,8 +129,22 @@ public class GunItem extends ToolItem implements Vanishable {
         return false;
     }
 
+    public static void startCoolingDown(PlayerEntity player, int ticks, boolean isReload, @Nullable Class affectsClass) {
+        if (player instanceof IGunUser gunUser) {
+            for (Item item : ItemReg.firearmItems) {
+                if (affectsClass == null || item.getClass() == affectsClass) {
+                    player.getItemCooldownManager().set(item, ticks);
+                }
+                if (isReload) {
+                    gunUser.setCanReload(false);
+                    gunUser.setGunState(GunHelper.GunStates.RELOADING);
+                }
+            }
+        } 
+    }
+
     public int bulletLifespan() {
-        return 35;
+        return 15;
     }
 
     public float spread() {

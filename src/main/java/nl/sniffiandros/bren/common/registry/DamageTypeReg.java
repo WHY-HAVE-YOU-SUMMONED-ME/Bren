@@ -18,7 +18,7 @@ public class DamageTypeReg {
         return new DamageSource(world.getRegistryManager().get(RegistryKeys.DAMAGE_TYPE).entryOf(key));
     }
 
-    public static DamageSource shot(World world, @Nullable Entity source,@Nullable Entity attacker) {
+    public static DamageSource shot(World world, @Nullable Entity source, @Nullable Entity attacker) {
         return new DamageSource(world.getRegistryManager().get(RegistryKeys.DAMAGE_TYPE).entryOf(BULLET_TYPE), source, attacker);
     }
 }

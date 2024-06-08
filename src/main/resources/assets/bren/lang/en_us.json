@@ -14,12 +14,13 @@
   "item.bren.bullet": "Bullet",
   "item.bren.shell": "Shell",
   "item.bren.metal_tube": "Metal Tube",
-  "item.bren.auto_loader_contraption": "Autoloader Contraption",
+  "item.bren.auto_loader_contraption": "Auto Loader Contraption",
 
   "enchantment.bren.silenced": "Silenced",
   "enchantment.bren.overflow": "Overflow",
   "enchantment.bren.autofill": "Autofill",
   "enchantment.bren.steady_hands": "Steady Hands",
+  "enchantment.bren.penetrating": "Penetrating",
   
   "desc.bren.item.gun_with_mag.content": "Rounds",
   "desc.bren.item.magazine.content": "Ammo",
@@ -44,7 +45,7 @@
   "attribute.name.fire_rate": "Fire Rate",
   "attribute.name.recoil": "Recoil",
 
-  "advancements.bren.adventure.auto_loader_contraption.description": "Obtain an Autoloader Contraption",
+  "advancements.bren.adventure.auto_loader_contraption.description": "Obtain an Auto Loader Contraption",
   "advancements.bren.adventure.auto_loader_contraption.title": "A whaaa...?!",
 
   "advancements.bren.adventure.machine_gun.description": "Obtain an Machine Gun",

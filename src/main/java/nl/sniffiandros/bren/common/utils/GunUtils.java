@@ -3,12 +3,17 @@ package nl.sniffiandros.bren.common.utils;
 import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.ai.TargetPredicate;
+import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.util.Arm;
 import net.minecraft.util.Hand;
+import net.minecraft.util.hit.HitResult;
+import net.minecraft.util.hit.EntityHitResult;
+import net.minecraft.util.math.Box;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec2f;
 import net.minecraft.util.math.Vec3d;
@@ -19,10 +24,13 @@ import nl.sniffiandros.bren.common.entity.BulletEntity;
 import nl.sniffiandros.bren.common.entity.IGunUser;
 import nl.sniffiandros.bren.common.network.NetworkUtils;
 import nl.sniffiandros.bren.common.registry.AttributeReg;
+import nl.sniffiandros.bren.common.registry.DamageTypeReg;
 import nl.sniffiandros.bren.common.registry.EnchantmentReg;
 import nl.sniffiandros.bren.common.registry.ItemReg;
 import nl.sniffiandros.bren.common.registry.NetworkReg;
+import nl.sniffiandros.bren.common.registry.ParticleReg;
 import nl.sniffiandros.bren.common.registry.custom.GunItem;
+import nl.sniffiandros.bren.common.registry.custom.RifleItem;
 import nl.sniffiandros.bren.common.registry.custom.MagazineItem;
 
 import java.util.ArrayList;
@@ -58,21 +66,30 @@ public class GunUtils {
             if (user.isPlayer()) {
                 stack.damage(1, user, (p) -> p.sendToolBreakStatus(Hand.MAIN_HAND));
             }
-
             List<Vec3d> position = GunUtils.calculatePositionBasedOnAngle(user);
             Vec3d origin = position.get(0);
             Vec3d front = position.get(1);
             Vec3d down = position.get(2);
             Vec3d side = position.get(3);
-
             for (PlayerEntity p : user.getWorld().getPlayers()) {
-                NetworkUtils.sendShotEffect(p, origin.add(side.add(down).multiply(0.15)), front);
+                    NetworkUtils.sendShotEffect(p, origin.add(side.add(down).multiply(0.15)), front);
             }
 
-            for (int i = 0; i < gunItem.bulletAmount(); ++i) {
-                float x = (user.getRandom().nextFloat() - 0.5f) * 2 * gunItem.spread();
-                float y = (user.getRandom().nextFloat() - 0.5f) * 2 * gunItem.spread();
-                GunUtils.spawnBullet(user, origin, front, stack, new Vec2f(x,y), false, gunItem.bulletLifespan());
+            if (!(stack.getItem() instanceof RifleItem)) {
+                for (int i = 0; i < gunItem.bulletAmount(); ++i) {
+                    float x = (user.getRandom().nextFloat() - 0.5f) * 2 * gunItem.spread();
+                    float y = (user.getRandom().nextFloat() - 0.5f) * 2 * gunItem.spread();
+                    GunUtils.spawnBullet(user, origin, front, stack, new Vec2f(x,y), false, gunItem.bulletLifespan());
+                }
+            } else {
+                TargetPredicate predicate = TargetPredicate.createNonAttackable().setBaseMaxDistance(128f);
+                Box ray = new Box(origin.add(front.multiply(128f)), origin);
+                LivingEntity entityHit = world.getClosestEntity(world.getEntitiesByClass(LivingEntity.class, ray, livingEntity -> true), predicate, user, user.getX(), user.getEyeY(), user.getZ());
+                if (entityHit != null && user.canSee(entityHit)) {
+                    entityHit.timeUntilRegen = 0;
+                    DamageSource damageSource = DamageTypeReg.shot(world, user, user);
+                    entityHit.damage(damageSource, (float)user.getAttributeValue(AttributeReg.RANGED_DAMAGE));
+                }
             }
         }
 
@@ -108,14 +125,16 @@ public class GunUtils {
     }
 
     public static void spawnBullet(LivingEntity entity, Vec3d origin, Vec3d front, ItemStack stack, Vec2f spread,
-                                   boolean fireBullet, int lifespan) {
+                                   boolean fireBullet, int bulletLifespan) {
         World world = entity.getWorld();
-        BulletEntity bullet = new BulletEntity(world, (float)entity.getAttributeValue(AttributeReg.RANGED_DAMAGE), lifespan, entity, fireBullet);
-        
-        String gunType = stack.getItem().toString();
-        float bulletVelocity = (gunType == "rifle" || gunType == "netherite_rifle") ? 6.125f : 3.5f;
-        Vec3d bulletPos = origin.subtract(new Vec3d(0,0.2,0)).subtract(front.multiply((double)bulletVelocity + 0.3d));
 
+        float bulletVelocity = 4f * (1 + Math.min(EnchantmentHelper.getLevel(EnchantmentReg.PENETRATING, stack) * 0.2f, 0.4f));
+
+        bulletLifespan *= 1 - (EnchantmentHelper.getLevel(EnchantmentReg.PENETRATING, stack) * 0.2f);
+
+        Vec3d bulletPos = origin.subtract(new Vec3d(0,0.2,0)).subtract(front.multiply((double)bulletVelocity + 0.3d));
+        
+        BulletEntity bullet = new BulletEntity(world, (float)entity.getAttributeValue(AttributeReg.RANGED_DAMAGE), bulletLifespan, entity, fireBullet, EnchantmentHelper.getLevel(EnchantmentReg.PENETRATING, stack));
         bullet.setPos(bulletPos.getX(), bulletPos.getY() - 0.1, bulletPos.getZ());
         bullet.setVelocity(entity, entity.getPitch() + spread.y, entity.getHeadYaw() + spread.x, 0.0F, bulletVelocity, 0.0F);
 

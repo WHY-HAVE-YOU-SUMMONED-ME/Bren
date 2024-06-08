@@ -80,11 +80,11 @@ public abstract class PlayerEntityMixin extends LivingEntity implements IGunUser
             this.setGunTicks(16);
 
             int fireRate = GunUtils.fire(this);
-            if (fireRate == 0) { return;}
-
-            c.set(this.getMainHandStack().getItem(), fireRate);
+            if (fireRate == 0) return;
 
             PlayerEntity player = (PlayerEntity) (Object) this;
+
+            GunItem.startCoolingDown(player, fireRate, false, this.getMainHandStack().getItem().getClass());
 
             MEvents.GUN_FIRED_EVENT.invoker().gunFired(player, this.getMainHandStack());
 

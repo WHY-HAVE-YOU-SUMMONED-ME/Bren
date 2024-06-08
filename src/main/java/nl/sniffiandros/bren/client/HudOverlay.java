@@ -25,7 +25,7 @@ public class HudOverlay implements HudRenderCallback {
         int height = context.getScaledWindowHeight();
 
         int x = width / 2;
-        int y = height/ 2;
+        int y = height / 2;
 
         MinecraftClient client = MinecraftClient.getInstance();
         if (client != null) {
@@ -64,13 +64,11 @@ public class HudOverlay implements HudRenderCallback {
         int rows = 2;
 
         for (int n = 0; n < max; ++n) {
-
             int ri = rows * 10;
+            int row = (int) Math.floor(n / ri);
 
-            int row = (int) Math.floor(n/ri);
-
-            int y1 = n * 6 - row*ri*6;
-            int x1 = 15*row + 15;
+            int y1 = n * 5 - row * ri * 5;
+            int x1 = 15 * row + 15;
 
             int u1 = n < i ? 0 : 24;
 

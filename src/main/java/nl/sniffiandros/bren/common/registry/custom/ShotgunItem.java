@@ -60,9 +60,7 @@ public class ShotgunItem extends GunItem{
                 if (!gunUser.canReload() || bullets.isEmpty() || getContents(stack) >= getMaxCapacity(stack)) {
                     return;
                 }
-                gunUser.setCanReload(false);
-                gunUser.setGunState(GunHelper.GunStates.RELOADING);
-                cooldownManager.set(stack.getItem(), 10);
+                GunItem.startCoolingDown(player, 10, true, null);
 
                 player.getWorld().playSound(null,
                         player.getX(),
@@ -107,7 +105,7 @@ public class ShotgunItem extends GunItem{
 
     @Override
     public int bulletLifespan() {
-        return 7;
+        return 5;
     }
 
     @Override

@@ -10,11 +10,15 @@ import net.minecraft.util.Identifier;
 import nl.sniffiandros.bren.common.Bren;
 import nl.sniffiandros.bren.common.registry.custom.*;
 
+import java.util.List;
+import java.util.ArrayList;
+
 public class ItemReg {
     public static final float MACHINE_GUN_RECOIL = 12.5f;
     public static final float AUTO_GUN_RECOIL = 10f;
     public static final float RIFLE_RECOIL = 24f;
     public static final float SHOTGUN_RECOIL = 36f;
+    public static List<Item> firearmItems = new ArrayList();
 
     public static final Item MACHINE_GUN = registerItem("machine_gun", new GunWithMagItem(
             new FabricItemSettings(), ToolMaterials.IRON, TagReg.MEDIUM_MAGAZINES, new GunProperties().rangedDamage(4.5f).fireRate(3).recoil(MACHINE_GUN_RECOIL)
@@ -32,11 +36,11 @@ public class ItemReg {
             new FabricItemSettings().fireproof(), ToolMaterials.NETHERITE, TagReg.MEDIUM_MAGAZINES, new GunProperties().rangedDamage(7f).fireRate(5).recoil(AUTO_GUN_RECOIL)
             .shootSound(SoundReg.ITEM_AUTO_GUN_SHOOT, SoundReg.ITEM_AUTO_GUN_SHOOT_SILENCED)));
 
-    public static final Item RIFLE = registerItem("rifle", new GunWithMagItem(
+    public static final Item RIFLE = registerItem("rifle", new RifleItem(
             new FabricItemSettings(), ToolMaterials.IRON, TagReg.SHORT_MAGAZINES, new GunProperties().rangedDamage(10f).fireRate(30).recoil(RIFLE_RECOIL)
             .shootSound(SoundReg.ITEM_RIFLE_SHOOT, SoundReg.ITEM_RIFLE_SHOOT_SILENCED)));
 
-    public static final Item NETHERITE_RIFLE = registerItem("netherite_rifle", new GunWithMagItem(
+    public static final Item NETHERITE_RIFLE = registerItem("netherite_rifle", new RifleItem(
             new FabricItemSettings().fireproof(), ToolMaterials.NETHERITE, TagReg.SHORT_MAGAZINES, new GunProperties().rangedDamage(12f).fireRate(30).recoil(RIFLE_RECOIL)
             .shootSound(SoundReg.ITEM_RIFLE_SHOOT, SoundReg.ITEM_RIFLE_SHOOT_SILENCED)));
 
@@ -60,6 +64,7 @@ public class ItemReg {
     public static final Item WORKBENCH = registerItem("workbench", new BlockItem(BlockReg.WORKBENCH, new FabricItemSettings()));
 
     private static Item registerItem(String name, Item item) {
+        if (item instanceof GunItem) firearmItems.add(item);
         return Registry.register(Registries.ITEM, new Identifier(Bren.MODID, name), item);
     }
 

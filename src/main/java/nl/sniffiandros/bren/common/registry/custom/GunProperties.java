@@ -7,6 +7,7 @@ public class GunProperties {
     float recoil;
     float rangedDamage;
     int fireRate;
+    float effectiveRange = 30f;
     SoundEvent sound;
     SoundEvent silentSound;
 
@@ -22,6 +23,10 @@ public class GunProperties {
     }
     public GunProperties recoil(float recoil) {
         this.recoil = recoil;
+        return this;
+    }
+    public GunProperties effectiveRange(float effectiveRange) {
+        this.effectiveRange = effectiveRange;
         return this;
     }
     public GunProperties shootSound(SoundEvent sound, SoundEvent silent) {

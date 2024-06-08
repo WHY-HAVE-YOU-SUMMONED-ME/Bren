@@ -35,20 +35,32 @@ public abstract class CustomFirearmTooltips {
         String insertion = "";
         UUID attributeID = attribute.getId();
         if (attributeID == AttributeReg.RANGED_DAMAGE_MODIFIER_ID) {
+
+            if (item instanceof GunItem gunItem) {
+                if (gunItem.bulletAmount() > 1) {
+                    insertion = "x" + formatter.format(gunItem.bulletAmount());
+                }
+            }
+
             if (player != null) {
                 value += player.getAttributeBaseValue(AttributeReg.RANGED_DAMAGE);
             }
+
         } else if (attributeID == AttributeReg.FIRE_RATE_MODIFIER_ID) {
             insertion = "t";
+
             if (player != null) {
                 value += player.getAttributeBaseValue(AttributeReg.FIRE_RATE);
             }
+
         } else if (attributeID == AttributeReg.RECOIL_MODIFIER_ID) {
             insertion = "˚";
             value *= 1 - Math.min(EnchantmentHelper.getLevel(EnchantmentReg.STEADY_HANDS, (ItemStack)(Object)this) * 0.2d, 1.0d);
+
             if (player != null) {
                 value += player.getAttributeBaseValue(AttributeReg.RECOIL);
             }
+
         }
         return formatter.format(value) + insertion;
     }

@@ -16,10 +16,11 @@ import net.minecraft.world.World;
 import nl.sniffiandros.bren.common.Bren;
 import nl.sniffiandros.bren.common.entity.IGunUser;
 import nl.sniffiandros.bren.common.registry.SoundReg;
+import nl.sniffiandros.bren.common.registry.custom.GunItem;
 import nl.sniffiandros.bren.common.utils.GunHelper;
 import nl.sniffiandros.bren.common.utils.GunUtils;
 
-public class GunWithMagItem extends GunItem{
+public class GunWithMagItem extends GunItem {
 
     private final TagKey<Item> compatibleMagazines;
 
@@ -43,9 +44,7 @@ public class GunWithMagItem extends GunItem{
                 if (!gunUser.canReload()) {
                     return;
                 }
-                gunUser.setCanReload(false);
-                gunUser.setGunState(GunHelper.GunStates.RELOADING);
-                cooldownManager.set(stack.getItem(), 20);
+                GunItem.startCoolingDown(player, 20, true, null);
             }
         }
     }

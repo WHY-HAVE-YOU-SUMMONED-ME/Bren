@@ -1,6 +1,7 @@
 package nl.sniffiandros.bren.common.entity;
 
 import com.mojang.datafixers.types.templates.Tag;
+import it.unimi.dsi.fastutil.ints.IntOpenHashSet;
 import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
 import net.fabricmc.fabric.api.tag.convention.v1.ConventionalBlockTags;
 import net.minecraft.block.BlockState;
@@ -37,6 +38,7 @@ import nl.sniffiandros.bren.common.Bren;
 import nl.sniffiandros.bren.common.config.MConfig;
 import nl.sniffiandros.bren.common.registry.DamageTypeReg;
 import nl.sniffiandros.bren.common.registry.ParticleReg;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Iterator;
 
@@ -44,15 +46,21 @@ public class BulletEntity extends ProjectileEntity {
     private static final TrackedData<Integer> LIFESPAN = DataTracker.registerData(BulletEntity.class, TrackedDataHandlerRegistry.INTEGER);
     private float damage;
     private boolean onFire;
+    private int penetratingLevel;
+    @Nullable
+    private Vec3d lastAirRingPosition;
+    @Nullable
+    private IntOpenHashSet damageBlacklist;
 
     public BulletEntity(EntityType<? extends BulletEntity> entityType, World world) {
         super(entityType, world);
     }
 
-    public BulletEntity(World world, float damage, int lifespan, LivingEntity owner, boolean onFire) {
+    public BulletEntity(World world, float damage, int lifespan, LivingEntity owner, boolean onFire, int penetratingLevel) {
         super(Bren.BULLET, world);
         this.damage = damage;
         this.onFire = onFire;
+        this.penetratingLevel = penetratingLevel;
         this.setLifespan(lifespan);
         this.setNoGravity(true);
         this.setOwner(owner);
@@ -119,14 +127,21 @@ public class BulletEntity extends ProjectileEntity {
 
         if (Math.ceil(l) == 0) {
             this.discard();
+            return;
         }
 
         if (this.age >= this.getLifespan()) {
             this.discard();
+            return;
         }
 
-        if (this.getWorld().isClient() && this.age >= 2 && this.age % 3 == 0) {
-            this.getWorld().addParticle(ParticleReg.AIR_RING_PARTICLE, this.getX(), this.getY() + this.getHeight()/2, this.getZ(), 0, 0, 0);
+        if (this.lastAirRingPosition == null) {
+            this.lastAirRingPosition = this.getPos();
+        }
+
+        if (this.getWorld().isClient() && this.getPos().squaredDistanceTo(this.lastAirRingPosition) >= 81f) {
+            this.getWorld().addParticle(ParticleReg.AIR_RING_PARTICLE, this.getX(), this.getY() + this.getHeight() / 2, this.getZ(), 0, 0, 0);
+            this.lastAirRingPosition = this.getPos();
         }
     }
 
@@ -142,6 +157,15 @@ public class BulletEntity extends ProjectileEntity {
             return;
         }
 
+        if (this.penetratingLevel > 0) {
+            if (this.damageBlacklist == null) {
+                this.damageBlacklist = new IntOpenHashSet(3);
+            }
+            if (!this.damageBlacklist.add(entity.getId())) {
+                return;
+            }
+        }
+
         if (entity instanceof LivingEntity livingEntity) {
             livingEntity.timeUntilRegen = 0;
             DamageSource damageSource = DamageTypeReg.shot(this.getWorld(), this, this.getOwner());
@@ -151,9 +175,13 @@ public class BulletEntity extends ProjectileEntity {
                 entity.setOnFireFor(4);
             }
         }
-        this.discard();
-    }
 
+        if (this.penetratingLevel >= 1) { 
+            this.penetratingLevel--;
+        } else {
+            this.discard();
+        }
+    }
 
     @Override
     protected void onBlockHit(BlockHitResult blockHitResult) {
